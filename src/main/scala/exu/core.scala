@@ -1424,37 +1424,31 @@ class BoomCore(implicit p: Parameters, edge: freechips.rocketchip.tilelink.TLEdg
          // To allow for diffs against spike :/
          def printf_inst(uop: MicroOp) = {
             when (uop.is_rvc) {
-               printf("(0x%x)", uop.inst(15,0))
+               printf("(0x%x) DASM(%x)", uop.inst(15,0), uop.inst(15,0))
             } .otherwise {
-               printf("(0x%x)", uop.inst)
+               printf("(0x%x) DASM(%x)", uop.inst, uop.inst)
             }
          }
          when (rob.io.commit.valids(w))
          {
+            printf("C%d: %d 0x%x ",
+               io.hartid, priv, Sext(rob.io.commit.uops(w).pc(vaddrBits,0), xLen))
             when (rob.io.commit.uops(w).dst_rtype === RT_FIX && rob.io.commit.uops(w).ldst =/= 0.U)
             {
-               printf("%d 0x%x ",
-                  priv, Sext(rob.io.commit.uops(w).pc(vaddrBits,0), xLen))
-               printf_inst(rob.io.commit.uops(w))
-               printf(" x%d 0x%x\n",
+               printf("x%d 0x%x ",
                   rob.io.commit.uops(w).ldst, rob.io.commit.uops(w).debug_wdata)
-
             }
             .elsewhen (rob.io.commit.uops(w).dst_rtype === RT_FLT)
             {
-               printf("%d 0x%x ",
-                  priv, Sext(rob.io.commit.uops(w).pc(vaddrBits,0), xLen))
-               printf_inst(rob.io.commit.uops(w))
-               printf(" f%d 0x%x\n",
+               printf("f%d 0x%x ",
                   rob.io.commit.uops(w).ldst, rob.io.commit.uops(w).debug_wdata)
             }
             .otherwise
             {
-               printf("%d 0x%x ",
-                  priv, Sext(rob.io.commit.uops(w).pc(vaddrBits,0), xLen))
-               printf_inst(rob.io.commit.uops(w))
-               printf("\n")
+               printf("                       ")
             }
+            printf_inst(rob.io.commit.uops(w))
+            printf("\n")
          }
       }
    }
