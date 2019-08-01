@@ -33,6 +33,8 @@ trait HasBoomTiles extends HasTiles
 
   protected val boomTileParams = p(BoomTilesKey)
   private val crossings = perTileOrGlobalSetting(p(RocketCrossingKey), boomTileParams.size)
+  val bwRegulator = LazyModule(new BwRegulator(0x20000000L))
+  sbus.control_bus.toVariableWidthSlave(Some("bw-reg")) { bwRegulator.regnode }
 
   // Make a tile and wire its nodes into the system,
   // according to the specified type of clock crossing.
@@ -42,7 +44,7 @@ trait HasBoomTiles extends HasTiles
     val boomCore = LazyModule(new boom.common.BoomTile(tp, crossing.crossingType)(augmentedTileParameters(tp)))
       .suggestName(tp.name)
 
-    connectMasterPortsToSBus(boomCore, crossing)
+    connectMasterPortsToSBusBwReg(boomCore, crossing, bwRegulator)
     connectSlavePortsToCBus(boomCore, crossing)
     connectInterrupts(boomCore, Some(debug), clintOpt, plicOpt)
 
@@ -68,6 +70,9 @@ class BoomSubsystemModule[+L <: BoomSubsystem](_outer: L) extends BaseSubsystemM
     wire.reset := reset
     wire.hartid := i.U
     wire.reset_vector := global_reset_vector
+  }
+  tile_inputs.zip(outer.bwRegulator.module.io.nWbInhibit).map { case (wire, nWbInhibit) =>
+    wire.nWbInhibit := nWbInhibit
   }
 }
 
