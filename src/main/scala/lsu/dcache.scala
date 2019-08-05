@@ -348,9 +348,8 @@ class BoomNonBlockingDCacheModule(outer: BoomNonBlockingDCache) extends HellaCac
   import TLMessages._
   val isWriteMiss = tl_out.a.bits.param === TLPermissions.NtoT || tl_out.a.bits.param === TLPermissions.BtoT
   io.cpu.perf.acquireT := edge.done(tl_out.a) && tl_out.a.bits.opcode === AcquireBlock && isWriteMiss
-
-  val isWb = tl_out.c.bits.param === TLPermissions.TtoN || tl_out.c.bits.param === TLPermissions.TtoB
-  io.cpu.perf.releaseDataT := edge.done(tl_out.c) && tl_out.c.bits.opcode === ReleaseData && isWb
+  io.cpu.perf.releaseData := edge.done(tl_out.c) && tl_out.c.bits.opcode === ReleaseData
+  io.cpu.perf.probeAckData := edge.done(tl_out.c) && tl_out.c.bits.opcode === ProbeAckData
 
   // no clock-gating support
   io.cpu.clock_enabled := true

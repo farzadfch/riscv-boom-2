@@ -224,7 +224,8 @@ class BoomCore(implicit p: Parameters, edge: freechips.rocketchip.tilelink.TLEdg
        ("DTLB miss", () => io.dmem.perf.tlbMiss),
        ("L2 TLB miss", () => io.ptw.perf.l2miss),
        ("D$ write miss", () => io.dmem.perf.acquireT),
-       ("D$ writeback", () => io.dmem.perf.releaseDataT)))))
+       ("D$ releaseData", () => io.dmem.perf.releaseData),
+       ("D$ probeAckData", () => io.dmem.perf.probeAckData)))))
 
 
    val csr = Module(new freechips.rocketchip.rocket.CSRFile(perfEvents))
