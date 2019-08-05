@@ -72,7 +72,7 @@ class BoomSubsystemModule[+L <: BoomSubsystem](_outer: L) extends BaseSubsystemM
     wire.reset_vector := global_reset_vector
   }
   tile_inputs.zip(outer.bwRegulator.module.io.nWbInhibit).map { case (wire, nWbInhibit) =>
-    wire.nWbInhibit := nWbInhibit
+    wire.nWbInhibit := RegNext(nWbInhibit)
   }
 }
 
