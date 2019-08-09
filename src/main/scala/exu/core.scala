@@ -63,6 +63,7 @@ trait HasBoomCoreIO extends freechips.rocketchip.tile.HasTileParameters {
          val trace = Output(Vec(coreParams.retireWidth,
             new freechips.rocketchip.rocket.TracedInstruction))
          val release = Flipped(Valid(new boom.lsu.ReleaseInfo))
+         val perf = new freechips.rocketchip.tile.TilePerfInputs
    }
 }
 
@@ -225,7 +226,9 @@ class BoomCore(implicit p: Parameters, edge: freechips.rocketchip.tilelink.TLEdg
        ("L2 TLB miss", () => io.ptw.perf.l2miss),
        ("D$ write miss", () => io.dmem.perf.acquireT),
        ("D$ releaseData", () => io.dmem.perf.releaseData),
-       ("D$ probeAckData", () => io.dmem.perf.probeAckData)))))
+       ("D$ probeAckData", () => io.dmem.perf.probeAckData),
+       ("blkdev get", () => io.perf.blkdev_get),
+       ("blkdev put", () => io.perf.blkdev_put)))))
 
 
    val csr = Module(new freechips.rocketchip.rocket.CSRFile(perfEvents))
