@@ -33,9 +33,9 @@ trait HasBoomTiles extends HasTiles
 
   protected val boomTileParams = p(BoomTilesKey)
   private val crossings = perTileOrGlobalSetting(p(RocketCrossingKey), boomTileParams.size)
-  val bwRegulator = LazyModule(new BwRegulator(0x20000000L))
+  val bwRegulator = LazyModule(new BwRegulator2(0x20000000L))
   pbus.toVariableWidthSlave(Some("bw-reg")) { bwRegulator.regnode }
-
+2
   // Make a tile and wire its nodes into the system,
   // according to the specified type of clock crossing.
   // Note that we also inject new nodes into the tile itself,
