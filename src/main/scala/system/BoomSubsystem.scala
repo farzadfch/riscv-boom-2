@@ -71,8 +71,8 @@ class BoomSubsystemModule[+L <: BoomSubsystem](_outer: L) extends BaseSubsystemM
     wire.hartid := i.U
     wire.reset_vector := global_reset_vector
   }
-  tile_inputs.zip(outer.bwRegulator.module.io.nWbInhibit).map { case (wire, nWbInhibit) =>
-    wire.nWbInhibit := RegNext(nWbInhibit)
+  tile_inputs.zip(outer.bwRegulator.module.io.nThrottleWb).map { case (wire, nThrottleWb) =>
+    wire.nThrottleWb := RegNext(nThrottleWb)
   }
 }
 

@@ -161,7 +161,7 @@ class BoomTileModuleImp(outer: BoomTile) extends BaseTileModuleImp(outer)
   outer.frontend.module.io.reset_vector := constants.reset_vector
   outer.frontend.module.io.hartid := constants.hartid
   outer.dcache.module.io.hartid := constants.hartid
-  outer.dcache.module.io.nWbInhibit := constants.nWbInhibit
+  outer.dcache.module.io.nThrottleWb := constants.nThrottleWb
   dcachePorts += core.io.dmem // TODO outer.dcachePorts += () => module.core.io.dmem ??
   //fpuOpt foreach { fpu => core.io.fpu <> fpu.io } RocketFpu - not needed in boom
   core.io.ptw <> ptw.io.dpath

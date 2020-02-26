@@ -263,8 +263,8 @@ class BoomNonBlockingDCacheModule(outer: BoomNonBlockingDCache) extends HellaCac
   val wbRelease = Wire(wb.io.release.cloneType)
   TLArbiter.lowest(edge, tl_out.c, wbRelease, prober.io.rep)
   wbRelease <> wb.io.release
-  wbRelease.valid := wb.io.release.valid && io.nWbInhibit
-  wb.io.release.ready := wbRelease.ready && io.nWbInhibit
+  wbRelease.valid := wb.io.release.valid && io.nThrottleWb
+  wb.io.release.ready := wbRelease.ready && io.nThrottleWb
 
   // store->load bypassing
   val s4_valid = Reg(next=s3_valid, init=Bool(false))
