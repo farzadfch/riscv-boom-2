@@ -72,8 +72,12 @@ class BoomSubsystemModule[+L <: BoomSubsystem](_outer: L) extends BaseSubsystemM
     wire.reset_vector := global_reset_vector
   }
   tile_inputs.zip(outer.bwRegulator.module.io.nThrottleWb).map { case (wire, nThrottleWb) =>
-    wire.nThrottleWb := RegNext(nThrottleWb)
+    wire.nThrottleWb := nThrottleWb
   }
+  tile_inputs.zip(outer.bwRegulator.module.io.wb).map { case (wire, c) =>
+    c := wire.wb
+  }
+//  outer.bwRegulator.module.io.c := outer.tiles(0).dcache.module.io.wb
 }
 
 ///// Adds a port to the system intended to master an AXI4 DRAM controller that supports a large physical address size
